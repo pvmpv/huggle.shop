@@ -1,0 +1,1172 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Huggle — товары для дома и уюта</title>
+    <style>
+        @font-face {
+            font-family: 'Soyuz Grotesk';
+            src: url('Soyuz_Grotesk_Bold.otf') format('opentype');
+            font-weight: bold;
+            font-style: normal;
+        }
+        @font-face {
+            font-family: 'Montserrat';
+            src: url('Montserrat-Regular.ttf') format('truetype');
+            font-weight: normal;
+            font-style: normal;
+        }
+
+        :root {
+            --bg: #f0eee3;
+            --ink: #1A1A1A;
+            --muted: #555;
+            --accent: #D7859F;
+            --light: #E7E4D8;
+        }
+
+        * { box-sizing: border-box; }
+
+        body {
+            background-color: var(--bg);
+            color: var(--ink);
+            font-family: 'Montserrat', Arial, sans-serif;
+            font-size: 16px;
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden;
+        }
+
+        h1, h2, h3, h4 { font-family: 'Soyuz Grotesk', sans-serif; line-height: 1.15; margin-top: 0; }
+        h1 { font-size: 42px; margin-bottom: 18px; }
+        h2 { font-size: 32px; margin-bottom: 10px; }
+        h3 { font-size: 20px; margin-bottom: 8px; }
+        p { margin: 0 0 15px; }
+        ul { margin: 0; padding: 0; list-style: none; }
+        a { color: inherit; text-decoration: none; cursor: pointer; }
+        img { display: block; max-width: 100%; }
+
+        .btn {
+            display: inline-block; font-family: 'Soyuz Grotesk', sans-serif;
+            font-size: 15px; padding: 13px 26px; border-radius: 999px;
+            border: 1px solid var(--ink); cursor: pointer; background: transparent;
+            color: var(--ink); text-align: center; transition: all .3s ease;
+        }
+        .btn-primary { background-color: var(--ink); color: var(--light); }
+        .btn-primary:hover { background-color: var(--accent); border-color: var(--accent); color: #fff; }
+        .btn-small { padding: 8px 18px; font-size: 13px; }
+        .btn-small:hover { background-color: var(--accent); border-color: var(--accent); color: #fff; }
+
+        .site-header {
+            position: sticky; top: 0; z-index: 50;
+            background-color: rgba(240, 238, 227, 0.94);
+            backdrop-filter: blur(6px);
+            border-bottom: 1px solid rgba(26, 26, 26, 0.12);
+        }
+        .header-inner { max-width: 1280px; margin: 0 auto; padding: 16px 40px; display: flex; align-items: center; gap: 40px; }
+        .logo { font-family: 'Soyuz Grotesk', sans-serif; font-size: 28px; letter-spacing: 0.5px; }
+        .logo span { color: var(--accent); }
+        .main-nav ul { display: flex; flex-wrap: wrap; gap: 20px; }
+        .main-nav a { font-size: 15px; border-bottom: 1px solid transparent; padding-bottom: 2px; transition: all .3s; }
+        .main-nav a:hover { color: var(--accent); border-color: var(--accent); }
+        .header-actions { margin-left: auto; display: flex; align-items: center; gap: 22px; }
+        .cart-link { font-family: 'Soyuz Grotesk', sans-serif; font-size: 14px; display: inline-flex; align-items: center; gap: 8px; padding: 9px 18px; border-radius: 999px; background-color: var(--ink); color: var(--light); }
+        .cart-count { background-color: var(--accent); color: #fff; border-radius: 50%; width: 20px; height: 20px; font-size: 11px; display: inline-flex; align-items: center; justify-content: center; }
+
+        .site-footer { background-color: var(--ink); color: var(--light); margin-top: 80px; }
+        .footer-inner { max-width: 1280px; margin: 0 auto; padding: 60px 40px 40px; display: grid; grid-template-columns: 1.4fr 1fr 1fr 1fr; gap: 40px; }
+        .footer-brand .logo { color: var(--light); display: inline-block; margin-bottom: 14px; }
+        .footer-brand p { font-size: 14px; color: rgba(231, 228, 216, .7); }
+        .footer-col h4 { font-size: 15px; margin-bottom: 16px; color: #fff; }
+        .footer-col li { margin-bottom: 9px; }
+        .footer-col a { font-size: 14px; color: rgba(231, 228, 216, .7); transition: color .3s; }
+        .footer-col a:hover { color: var(--accent); }
+        .footer-bottom { max-width: 1280px; margin: 0 auto; padding: 20px 40px 30px; border-top: 1px solid rgba(231, 228, 216, .15); display: flex; justify-content: space-between; font-size: 12px; color: rgba(231, 228, 216, .5); }
+
+        #app { min-height: 60vh; max-width: 1280px; margin: 0 auto; padding: 40px; }
+        .breadcrumbs { font-size: 13px; color: var(--muted); display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 30px; align-items: center; }
+        .breadcrumbs a:hover { color: var(--accent); }
+        .breadcrumbs span.sep { opacity: .5; }
+        .breadcrumbs span.current { color: var(--ink); }
+
+        .hero { display: grid; grid-template-columns: 1.05fr 1fr; gap: 60px; align-items: center; padding-bottom: 60px; }
+        .hero-kicker { font-size: 12px; letter-spacing: 3px; text-transform: uppercase; color: var(--accent); margin-bottom: 18px; }
+        .hero-sub { font-size: 18px; color: var(--muted); margin-bottom: 30px; }
+        .hero-buttons { display: flex; gap: 14px; margin-bottom: 34px; }
+        .hero-image img { width: 100%; height: 480px; object-fit: cover; border-radius: 4px; background: #e8e5d8; }
+
+        .section-title { margin: 40px 0 30px 0; }
+        .category-grid { display: grid; grid-template-columns: repeat(4, 1fr); grid-auto-rows: 220px; gap: 18px; }
+        .category-card { position: relative; overflow: hidden; border-radius: 4px; background: #e8e5d8; display: block; }
+        .category-card--large { grid-column: span 2; grid-row: span 2; }
+        .category-card img { width: 100%; height: 100%; object-fit: cover; transition: transform .6s, filter .6s; }
+        .category-card:hover img { transform: scale(1.06); filter: brightness(.85); }
+        .category-overlay { position: absolute; left: 0; right: 0; bottom: 0; padding: 22px; background: linear-gradient(to top, rgba(26,26,26,.9) 0%, transparent 100%); color: var(--light); }
+        .category-overlay h3 { color: #fff; margin-bottom: 4px; }
+        .category-overlay span { font-size: 13px; opacity: .85; }
+
+        .subcat-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-bottom: 40px; }
+        .subcat-card { position: relative; overflow: hidden; border-radius: 4px; background: #e8e5d8; aspect-ratio: 4/3; display: block; }
+        .subcat-card img { width: 100%; height: 100%; object-fit: contain; padding: 3%; background: #e8e5d8; transition: transform .6s, filter .6s; }
+        .subcat-card:hover img { transform: scale(1.06); filter: brightness(.85); }
+        .subcat-info { position: absolute; left: 0; right: 0; bottom: 0; padding: 20px; background: linear-gradient(to top, rgba(26,26,26,.9) 0%, transparent 100%); color: var(--light); }
+        .subcat-info h3 { color: #fff; font-size: 20px; margin: 0; }
+
+        .catalog-layout { display: grid; grid-template-columns: 240px 1fr; gap: 40px; align-items: flex-start; }
+        .filters { position: sticky; top: 90px; font-size: 14px; }
+        .filters h3 { font-size: 16px; margin: 0 0 14px; }
+        .filters .filter-group { margin-bottom: 18px; }
+        .filters .filter-group h4 { font-family: 'Soyuz Grotesk', sans-serif; font-size: 14px; margin: 0 0 8px; color: var(--ink); }
+        .filters label { display: flex; align-items: center; gap: 8px; margin-bottom: 5px; color: var(--muted); cursor: pointer; font-size: 13px; }
+        .filters .filter-reset { margin-top: 14px; font-size: 13px; color: var(--accent); border-bottom: 1px solid var(--accent); display: inline-block; cursor: pointer; }
+
+        .catalog-toolbar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 22px; padding-bottom: 14px; border-bottom: 1px solid rgba(26,26,26,.12); font-size: 14px; color: var(--muted); }
+
+        /* Карточка товара */
+        .product-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 26px 22px; }
+        .product-card { display: flex; flex-direction: column; position: relative; }
+
+        .product-image-wrapper {
+            position: relative; width: 100%; aspect-ratio: 1/1;
+            background: #e8e5d8; border-radius: 4px; overflow: hidden; margin-bottom: 14px;
+            cursor: pointer;
+        }
+        .product-image-wrapper img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.4s ease; }
+        .product-image-wrapper:hover img { transform: scale(1.03); }
+
+        .carousel-dots { position: absolute; bottom: 12px; left: 0; right: 0; display: flex; justify-content: center; gap: 8px; z-index: 10; }
+        .carousel-dot {
+            width: 12px; height: 12px; border-radius: 50%;
+            background: rgba(255, 255, 255, 0.6); border: 1px solid rgba(0,0,0,0.3);
+            cursor: pointer; padding: 0; transition: all 0.2s;
+        }
+        .carousel-dot:hover { background: #fff; }
+        .carousel-dot.active { background: #fff; transform: scale(1.3); border-color: transparent; }
+
+        .badge { position: absolute; top: 12px; left: 12px; background: var(--ink); color: var(--light); font-size: 11px; text-transform: uppercase; padding: 5px 10px; border-radius: 999px; z-index: 10; pointer-events: none; }
+        .badge--new { background: var(--accent); }
+
+        .product-title { font-size: 18px; margin-bottom: 4px; cursor: pointer; }
+        .product-title:hover { color: var(--accent); }
+        .product-desc { font-size: 13px; color: var(--muted); margin-bottom: 12px; flex-grow: 1; }
+        .product-bottom { display: flex; align-items: center; justify-content: space-between; margin-top: auto; }
+        .price { font-family: 'Soyuz Grotesk', sans-serif; font-size: 18px; }
+
+        /* Страница товара */
+        .product-page { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; margin-bottom: 60px; }
+        .product-page-image-wrap { position: relative; width: 100%; aspect-ratio: 1/1; background: #e8e5d8; border-radius: 4px; overflow: hidden; }
+        .product-page-image-wrap img { width: 100%; height: 100%; object-fit: cover; }
+
+        .product-page-info h1 { font-size: 38px; margin-bottom: 10px; }
+        .product-sku { font-size: 13px; color: var(--muted); margin-bottom: 20px; }
+        .product-page-price { font-family: 'Soyuz Grotesk', sans-serif; font-size: 32px; margin-bottom: 24px; }
+        .product-page-desc { font-size: 16px; margin-bottom: 30px; }
+
+        .specs-title { font-family: 'Soyuz Grotesk', sans-serif; font-size: 20px; margin-bottom: 15px; }
+        .specs-list { border-top: 1px solid rgba(26,26,26,0.1); margin-bottom: 30px; }
+        .specs-item { display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid rgba(26,26,26,0.1); font-size: 14px; }
+        .specs-key { color: var(--muted); }
+
+        .product-actions { display: flex; gap: 16px; align-items: center; }
+        .btn-large { font-size: 18px; padding: 16px 40px; }
+
+        /* Корзина */
+        .cart-page { display: grid; gap: 20px; margin-bottom: 40px; }
+        .cart-item { display: grid; grid-template-columns: 100px 1fr auto auto; gap: 20px; align-items: center; padding: 16px 0; border-bottom: 1px solid rgba(26,26,26,.12); }
+        .cart-item img { width: 90px; height: 90px; object-fit: contain; background: #e8e5d8; border-radius: 4px; padding: 6px; flex-shrink: 0; }
+        .cart-item-title { font-family: 'Soyuz Grotesk', sans-serif; font-size: 18px; }
+        .cart-item-price { font-family: 'Soyuz Grotesk', sans-serif; font-size: 16px; color: var(--muted); }
+        .cart-qty { display: inline-flex; align-items: center; gap: 8px; }
+        .cart-qty button { width: 30px; height: 30px; border-radius: 50%; border: 1px solid var(--ink); background: transparent; cursor: pointer; font-size: 16px; }
+        .cart-qty button:hover { background: var(--accent); border-color: var(--accent); color: #fff; }
+        .cart-remove { background: none; border: none; color: var(--muted); cursor: pointer; font-size: 13px; }
+        .cart-remove:hover { color: var(--accent); }
+        .cart-total { display: flex; justify-content: space-between; align-items: center; padding-top: 20px; border-top: 2px solid var(--ink); font-family: 'Soyuz Grotesk', sans-serif; font-size: 22px; }
+        .cart-empty { text-align: center; padding: 60px 20px; color: var(--muted); }
+        .cart-empty a { color: var(--accent); border-bottom: 1px solid var(--accent); }
+
+        @media (max-width: 1100px) {
+            .category-grid { grid-template-columns: repeat(2, 1fr); }
+            .category-card--large { grid-column: span 2; grid-row: span 1; }
+            .product-grid { grid-template-columns: repeat(2, 1fr); }
+            .catalog-layout { grid-template-columns: 200px 1fr; }
+            .product-page { grid-template-columns: 1fr; gap: 40px; }
+        }
+        @media (max-width: 800px) {
+            #app { padding: 20px; }
+            .hero { grid-template-columns: 1fr; gap: 30px; }
+            .hero-image img { height: 300px; }
+            .subcat-grid { grid-template-columns: repeat(2, 1fr); }
+            .catalog-layout { grid-template-columns: 1fr; }
+            .filters { position: static; margin-bottom: 30px; padding-bottom: 20px; border-bottom: 1px solid rgba(26,26,26,.12); }
+            .footer-inner { grid-template-columns: 1fr 1fr; }
+        }
+        @media (max-width: 520px) {
+            .product-grid { grid-template-columns: 1fr; }
+            .subcat-grid { grid-template-columns: 1fr; }
+            .footer-inner { grid-template-columns: 1fr; }
+            .product-actions { flex-direction: column; align-items: stretch; }
+        }
+        /* ===== Новогодний баннер ===== */
+/* ===== Новогодний баннер ===== */
+        /* ===== Стили для hero-текста ===== */
+                /* ===== Стили для hero-текста ===== */
+        .hero-text { position: relative; }
+        .hero-kicker {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 12px;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: var(--accent);
+            margin-bottom: 18px;
+        }
+        .hero-kicker::before,
+        .hero-kicker::after {
+            content: '';
+            width: 28px;
+            height: 1px;
+            background: var(--accent);
+            opacity: 0.6;
+        }
+        .hero-deco-line {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin: 18px 0 24px;
+        }
+        .hero-deco-line span {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--accent);
+            opacity: 0.35;
+        }
+        .hero-deco-line span:nth-child(2) { opacity: 0.6; }
+        .hero-deco-line span:nth-child(3) { opacity: 0.9; }
+        .hero-deco-line::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: linear-gradient(to right, var(--accent) 0%, transparent 100%);
+            opacity: 0.5;
+            margin-left: 6px;
+        }
+
+        /* ===== Стили для розового баннера ===== */
+        .hero-banner {
+            margin-top: 30px;
+            padding: 32px 36px;
+            background: var(--accent);
+            color: #fff;
+            border-radius: 12px;
+            position: relative; /* ИСПРАВЛЕНО С center НА relative */
+            overflow: hidden;
+            cursor: pointer;
+            transition: transform .35s ease, box-shadow .35s ease;
+            box-shadow: 0 10px 30px rgba(215, 133, 159, 0.25);
+            
+            display: flex;
+            align-items: center; 
+
+            gap: 40px;
+        }
+        
+        .hero-banner:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 18px 45px rgba(215, 133, 159, 0.45);
+        }
+        
+        .hero-banner::before {
+            content: '';
+            position: absolute;
+            top: -70px;
+            right: -50px;
+            width: 240px;
+            height: 240px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(255,255,255,0.15) 0%, transparent 70%);
+        }
+        
+        .hero-banner-text {
+            position: relative;
+            z-index: 2;
+    
+        }
+        
+        .hero-banner-kicker {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 11px;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            font-family: 'Montserrat', sans-serif;
+            color: rgba(255, 255, 255, 0.8);
+            margin-bottom: 10px;
+        }
+        
+        .hero-banner-kicker::before {
+            content: '';
+            width: 24px;
+            height: 1px;
+            background: rgba(255, 255, 255, 0.8);
+        }
+        
+        .hero-banner-title {
+            font-family: 'Soyuz Grotesk', sans-serif;
+            font-size: 34px;
+            line-height: 1.1;
+            margin: 0 0 20px;
+            color: #fff;
+        }
+        
+        .hero-banner-title span {
+            display: inline-block;
+            font-size: 22px;
+            color: rgba(255, 255, 255, 0.85);
+            font-weight: normal;
+        }
+        
+        .hero-banner-cta {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 11px 22px;
+            background: var(--light);
+            color: var(--accent);
+            border-radius: 999px;
+            font-family: 'Soyuz Grotesk', sans-serif;
+            font-size: 14px;
+            font-weight: bold;
+            transition: gap .3s ease, transform .3s ease;
+        }
+        
+        .hero-banner:hover .hero-banner-cta {
+            gap: 16px;
+            transform: translateX(3px);
+        }
+        
+        .hero-banner-cta-arrow {
+            font-size: 16px;
+            line-height: 1;
+        }
+
+        /* Картинка в баннере */
+        .hero-banner-img {
+            position: relative;
+            z-index: 2;
+            width: 140px; 
+            height: 140px;
+            object-fit: contain;
+            flex-shrink: 0; /* Чтобы картинка не сжималась, если текст длинный */
+            filter: drop-shadow(0 6px 12px rgba(0,0,0,0.15));
+            transition: transform .35s ease;
+            margin-left: 160px;
+        }
+
+        .hero-banner:hover .hero-banner-img {
+            transform: scale(1.05) rotate(2deg);
+        }
+
+        /* Адаптив для мобильных */
+        @media (max-width: 800px) {
+            .hero-banner { 
+                padding: 24px 22px; 
+                flex-direction: column; /* На телефонах текст и картинка встанут столбиком */
+                align-items: flex-start; 
+                gap: 20px;
+            }
+            .hero-banner-text { max-width: 100%; }
+            .hero-banner-title { font-size: 24px; }
+            .hero-banner-title span { font-size: 18px; }
+            .hero-banner-img { 
+                width: 120px;
+                height: 120px;
+                align-self: center; 
+                margin-left: 0;
+            }}
+                   /* Стили для выбора цвета */
+        .color-picker { margin: 18px 0 24px; }
+        .color-picker-title { font-size: 14px; color: var(--muted); margin-bottom: 10px; display: block; }
+        .color-options { display: flex; flex-wrap: wrap; gap: 10px; }
+        
+        .color-btn {
+            padding: 8px 18px !important;
+            border: 1px solid var(--ink) !important;
+            border-radius: 999px !important;
+            background: #fff !important;
+            font-family: 'Montserrat', sans-serif !important;
+            font-size: 14px !important;
+            cursor: pointer !important;
+            transition: all 0.2s ease !important;
+            color: var(--ink) !important;
+            display: inline-block !important;
+        }
+        
+        .color-btn:hover { 
+            border-color: var(--accent) !important; 
+            color: var(--accent) !important; 
+        }
+        
+        .color-btn.active {
+            background: var(--ink) !important;
+            color: #fff !important;
+            border-color: var(--ink) !important;
+        }
+
+    
+    </style>
+</head>
+<body>
+
+<header class="site-header">
+    <div class="header-inner">
+        <a href="#" onclick="navigate('home')" class="logo">huggle<span>.</span></a>
+        <nav class="main-nav">
+            <ul>
+                <li><a onclick="navigate('home')">Главная</a></li>
+                <li><a onclick="navigate('category', 'decor')">Декор</a></li>
+                <li><a onclick="navigate('category', 'textile')">Текстиль</a></li>
+                <li><a onclick="navigate('category', 'storage')">Хранение</a></li>
+                <li><a onclick="navigate('category', 'aroma')">Ароматы</a></li>
+                <li><a onclick="navigate('category', 'light')">Свет</a></li>
+                <li><a onclick="navigate('category', 'tableware')">Посуда</a></li>
+                <li><a onclick="navigate('category', 'newyear')">Новый год</a></li>
+                
+            </ul>
+        </nav>
+        <div class="header-actions">
+            <a href="#" onclick="navigate('cart'); return false;" class="cart-link">Корзина <span class="cart-count">0</span></a>
+        </div>
+    </div>
+</header>
+
+<main id="app"></main>
+
+<footer class="site-footer">
+    <div class="footer-inner">
+        <div class="footer-brand">
+            <a href="#" onclick="navigate('home')" class="logo">huggle<span>.</span></a>
+            <p>Товары для дома и уюта.<br>Иркутск, доставка по России.</p>
+        </div>
+        <div class="footer-col">
+            <h4>Каталог</h4>
+            <ul>
+                <li><a onclick="navigate('category', 'decor')">Декор и интерьер</a></li>
+                <li><a onclick="navigate('category', 'textile')">Текстиль</a></li>
+                <li><a onclick="navigate('category', 'storage')">Организация хранения</a></li>
+                <li><a onclick="navigate('category', 'aroma')">Ароматы для дома</a></li>
+                <li><a onclick="navigate('category', 'light')">Освещение</a></li>
+                <li><a onclick="navigate('category', 'tableware')">Посуда</a></li>
+                <li><a onclick="navigate('category', 'newyear')">Новый год</a></li>
+            </ul>
+        </div>
+        <div class="footer-col">
+            <h4>Покупателям</h4>
+            <ul>
+    <li><a onclick="navigate('delivery')">Доставка и оплата</a></li>
+    <li><a onclick="navigate('returns')">Возврат</a></li>
+    <li><a onclick="navigate('contacts')">Контакты</a></li>
+            </ul>
+        </div>
+        <div class="footer-col">
+            <h4>Связаться</h4>
+            <ul>
+                <li><a href="tel:+70000000000">+7 (904) 113-45-75</a></li>
+                <li><a href="mailto:hello@huggle.ru">hello@huggle.ru</a></li>
+            </ul>
+        </div>
+    </div>
+    <div class="footer-bottom">
+        <p>© 2026 Huggle. Товары для дома и уюта.</p>
+        <p>Информация на сайте не является публичной офертой.</p>
+    </div>
+</footer>
+
+<script>
+    let carouselState = {};
+    let activeFilters = {};
+    let cart = JSON.parse(localStorage.getItem('huggleCart') || '{}');
+
+    function saveCart() {
+        localStorage.setItem('huggleCart', JSON.stringify(cart));
+        updateCartUI();
+    }
+
+    function updateCartUI() {
+        const count = Object.values(cart).reduce((s, q) => s + q, 0);
+        document.querySelectorAll('.cart-count').forEach(el => el.textContent = count);
+    }
+
+    function addToCart(event, productId) {
+        if (event) { event.stopPropagation(); event.preventDefault(); }
+        cart[productId] = (cart[productId] || 0) + 1;
+        saveCart();
+        if (event && event.target) {
+            const btn = event.target;
+            const old = btn.textContent;
+            btn.textContent = 'Добавлено ✓';
+            setTimeout(() => btn.textContent = old, 1000);
+        }
+    }
+
+    function changeQty(productId, delta) {
+        cart[productId] = (cart[productId] || 0) + delta;
+        if (cart[productId] <= 0) delete cart[productId];
+        saveCart();
+        renderCart(document.getElementById('app'));
+    }
+
+    function removeFromCart(productId) {
+        delete cart[productId];
+        saveCart();
+        renderCart(document.getElementById('app'));
+    }
+
+    const db = {
+        categories: {
+            'decor': {
+                title: 'Декор и интерьер', desc: 'Картины, постеры, вазы...',
+                img: 'главная/дек.jpg',
+                subcats: ['Картины и постеры', 'Искусственные цветы', 'Вазы'],
+                subcatImgs: {
+                    'Картины и постеры': 'главная/постер.jpg',
+                    'Искусственные цветы': 'главная/цв.png',
+                    'Вазы': 'главная/ваза.png'
+                },
+                type: 'tiles'
+            },
+            'textile': {
+                title: 'Текстиль', desc: 'Подушки, пледы и шторы...',
+                img: 'главная/текст.jpg',
+                subcats: ['Декоративные подушки', 'Пледы', 'Шторы'],
+                subcatImgs: {
+                    'Декоративные подушки': 'главная/подушк.png',
+                    'Пледы': 'главная/плед.png',
+                    'Шторы': 'главная/шторы.png'
+                },
+                type: 'tiles'
+            },
+            'storage': {
+                title: 'Организация хранения', desc: 'Коробки, органайзеры...',
+                img: 'главная/орг.jpg',
+                subcats: ['Органайзеры', 'Коробки'],
+                subcatImgs: {
+                    'Органайзеры': 'главная/jhu.png',
+                    'Коробки': 'главная/rjh.png'
+                },
+                type: 'tiles'
+            },
+            'aroma': {
+                title: 'Ароматы', desc: 'Свечи и диффузоры...',
+                img: 'главная/свечи.jpg',
+                subcats: ['Ароматические свечи', 'Диффузоры'],
+                subcatImgs: {
+                    'Ароматические свечи': 'главная/св.png',
+                    'Диффузоры': 'главная/lba.png'
+                },
+                type: 'tiles'
+            },
+            'light': {
+                title: 'Освещение', desc: 'Лампы и гирлянды...',
+                img: 'главная/свет.jpg',
+                subcats: ['Настольные лампы', 'Гирлянды'],
+                subcatImgs: {
+                    'Настольные лампы': 'главная/лампо.png',
+                    'Гирлянды': 'главная/гир.png'
+                },
+                type: 'tiles'
+            },
+            'tableware': {
+                title: 'Посуда', desc: 'Посуда для уютных завтраков...',
+                img: 'главная/пос.jpg',
+                subcats: ['Тарелки', 'Кружки'],
+                subcatImgs: {
+                    'Тарелки': 'главная/тарелк.png',
+                    'Кружки': 'главная/кру.png'
+                },
+                type: 'tiles'
+            },
+            'newyear': {
+                title: 'Новый год',
+                desc: 'Ёлочные игрушки, гирлянды, декор...',
+                img: 'главная/нг.jpg',
+                type: 'flat'
+            }
+        },
+        products: [
+            // Постеры
+            { id: 1, subcat: 'Картины и постеры', title: 'Картина «Пляж через розовые очки»', shortDesc: 'Печать на плотной бумаге, рваные края', desc: 'Печать на плотной бумаге, рваные края', price: 890, images: ['картиныпостеры/1.jpg'], badge: 'Хит', sku: 'ART-001', color: 'Розовый', material: 'Бумага', style: 'Современный', specs: { 'Артикул': 'ART-001', 'Размер': '30×40 см', 'Материал': 'Бумага 250 г/м²', 'Стилистика': 'экспрессивная графика с элементами примитивизма' } },
+            { id: 2, subcat: 'Картины и постеры', title: 'Постер «Космическая фантазия»', shortDesc: 'Коллаж с глитч-эстетикой', desc: 'Коллаж с элементами глитч-эстетики и космической тематикой', price: 890, images: ['картиныпостеры/2.jpg'], badge: 'Новинка', sku: 'ART-002', color: 'Синий', material: 'Бумага', style: 'Современный', specs: { 'Артикул': 'ART-002', 'Размер': '40×50 см', 'Материал': 'Плотная бумага', 'Особенности': 'Яркие акценты, глиттер-эффекты' } },
+            { id: 3, subcat: 'Картины и постеры', title: 'Постер «Эмоциональный маркетинг»', shortDesc: 'Ретро-фото с цифровой доработкой', desc: 'Ретро-фотография с цифровой доработкой, акцент на эмоции', price: 780, images: ['картиныпостеры/3.jpg'], sku: 'ART-003', color: 'Разноцветный', material: 'Бумага', style: 'Ретро', specs: { 'Артикул': 'ART-003', 'Размер': '100×60 см', 'Формат': 'Горизонтальный', 'Стиль': 'Ретро-коллаж, эмоциональный дизайн' } },
+            { id: 4, subcat: 'Картины и постеры', title: 'Линогравюра «Синяя фигура»', shortDesc: 'Репродукция в духе Матисса', desc: 'Репродукция в духе Матисса, лаконичная цветовая гамма', price: 900, images: ['картиныпостеры/4.jpg'], sku: 'ART-004', color: 'Синий', material: 'Бумага', style: 'Современный', specs: { 'Артикул': 'ART-004', 'Размер': '30×40 см', 'Материал': 'Бумага', 'Техника': 'Линогравюра', 'Рама': 'Нет' } },
+            { id: 5, subcat: 'Картины и постеры', title: 'Постер «Not Doing Much»', shortDesc: 'Арт-фотография в пастельных тонах', desc: 'Арт-фотография в пастельно-неоновой палитре', price: 1100, images: ['картиныпостеры/5.jpg'], sku: 'ART-005', color: 'Розовый', material: 'Бумага', style: 'Современный', specs: { 'Артикул': 'ART-005', 'Размер': '40×50 см', 'Материал': 'Плотная фотобумага', 'Стиль': 'Современный арт, поп-эстетика' } },
+
+            // Подушки
+            { id: 6, subcat: 'Декоративные подушки', title: 'Подушка «Винтаж»', shortDesc: 'Велюр, цветочная вышивка, рюши', desc: 'Велюровая подушка со съёмным чехлом и цветочной вышивкой, акцентная фактура с рюшами', price: 1290, images: ['подушки/1.png', 'подушки/11.png'], badge: 'Хит', sku: 'TXT-001', color: 'Розовый', material: 'Велюр', style: 'Винтаж', specs: { 'Артикул': 'TXT-001', 'Размер': '45×45 см', 'Материал': 'Велюр (хлопок)', 'Наполнитель': 'Холлофайбер', 'Форма': 'Прямоугольник', 'Особенности': 'Съёмный чехол, декоративная вышивка, рюши по краю' } },
+            { id: 7, subcat: 'Декоративные подушки', title: 'Подушка «Луна»', shortDesc: 'Плюш, форма полумесяца, розовая', desc: 'Мягкая подушка в форме полумесяца, нежный розовый оттенок, тактильно приятная фактура', price: 1100, images: ['подушки/2.png', 'подушки/22.jpeg'], sku: 'TXT-002', color: 'Розовый', material: 'Плюш', style: 'Современный', specs: { 'Артикул': 'TXT-002', 'Размер': '45×45 см', 'Материал': 'Плюш', 'Наполнитель': 'Синтепух', 'Форма': 'Полумесяц', 'Особенности': 'Объёмная форма, мягкая фактура' } },
+            { id: 8, subcat: 'Декоративные подушки', title: 'Подушка «Сердце»', shortDesc: 'Лён, форма сердца, цветочный принт', desc: 'Текстильная подушка в форме сердца с цветочным принтом и декоративной оборкой', price: 1350, images: ['подушки/3.png', 'подушки/33.jpeg'], sku: 'TXT-003', color: 'Белый', material: 'Лён', style: 'Винтаж', specs: { 'Артикул': 'TXT-003', 'Размер': '40×40 см', 'Материал': 'Лен', 'Наполнитель': 'Холлофайбер', 'Форма': 'Сердце', 'Особенности': 'Принт, декоративная оборка по краю' } },
+              { id: 9, subcat: 'Декоративные подушки', title: 'Подушка «С рюшами»', 
+              variants: ['Пудровая роза', 'Коралловая', 'Черная', 'Бирюзовая'],
+              shortDesc: 'Хлопковый бархат, объёмные рюши', desc: 'Нежная подушка из бархатистой ткани с объёмными рюшами и кружевными акцентами', price: 1200, images: ['подушки/4.png', 'подушки/44.png', 'подушки/444.png', 'подушки/41.png'], badge: 'Новинка', sku: 'TXT-004', color: 'Розовый', material: 'Бархат', style: 'Винтаж', specs: { 'Артикул': 'TXT-004', 'Размер': '45×45 см', 'Материал': 'Хлопковый бархат', 'Наполнитель': 'Синтепух', 'Форма': 'Квадратная', 'Особенности': 'Объёмные рюши, кружевные детали' } },
+            { id: 10, subcat: 'Декоративные подушки', title: 'Подушка «С бахромой»', 
+              variants: ['Серая', 'Розовая', 'Синяя'],
+              shortDesc: 'Хлопок, декоративная бахрома', desc: 'Лаконичная подушка с выразительной бахромой, однотонная, в пастельных оттенках', price: 890, images: ['подушки/51.png', 'подушки/5.png', 'подушки/52.png', 'подушки/53.jpeg'], sku: 'TXT-005', color: 'Розовый', material: 'Хлопок', style: 'Современный', specs: { 'Артикул': 'TXT-005', 'Размер': '40×40 см', 'Материал': 'Хлопок', 'Наполнитель': 'Холлофайбер', 'Форма': 'Прямоугольник', 'Особенности': 'Декоративная бахрома по периметру' } },
+
+            // Цветы
+            { id: 11, subcat: 'Искусственные цветы', title: 'Суккулент в лаконичном кашпо', shortDesc: 'Искусственный суккулент в керамическом кашпо', desc: 'Аккуратный искусственный суккулент с выразительной фактурой — универсальный декор для полки, рабочего стола или подоконника; поставляется в стильном керамическом кашпо', price: 999, images: ['цветы/1.png', 'цветы/11.jpg'], badge: 'Хит', sku: 'DEC-FLW-001', color: 'Зелёный', material: 'Силикон', style: 'Современный', specs: { 'Артикул': 'DEC-FLW-001', 'Тип': 'Искусственное растение (суккулент)', 'Высота': '25 см', 'Кашпо': 'Керамика, матовая, белый цвет, диаметр 10 см', 'Цвет': 'Натуральный зелёный с градиентом', 'Материал растения': 'Высококачественный силикон с текстурированной поверхностью', 'Особенности': 'Реалистичная имитация живого суккулента, не требует ухода, устойчивая база, готовое решение для декора' } },
+            { id: 12, subcat: 'Искусственные цветы', title: 'Ветка эвкалипта «Серебристый акцент»', shortDesc: 'Искусственная ветка, серебристо-зелёная', desc: 'Стильная искусственная ветка эвкалипта с округлыми листьями — лаконичный элемент для минималистичных композиций; поставляется в компактном керамическом кашпо для самостоятельной расстановки', price: 1690, images: ['цветы/2.png', 'цветы/21.jpg'], sku: 'DEC-FLW-002', color: 'Зелёный', material: 'Пластик', style: 'Минимализм', specs: { 'Артикул': 'DEC-FLW-002', 'Тип': 'Искусственная ветка', 'Высота': '45 см', 'Кашпо': 'Керамика, матовая, белый цвет, диаметр 8 см', 'Материал': 'Гибкий пластик с матовым покрытием', 'Цвет': 'Серебристо‑зелёный с лёгкой патиной', 'Особенности': 'Естественная изогнутая форма, подходит для самостоятельного размещения в кашпо, не выцветает, не требует ухода' } },
+            { id: 13, subcat: 'Искусственные цветы', title: 'Монстера «Тропический акцент»', shortDesc: 'Искусственная монстера, 60 см', desc: 'Эффектная искусственная монстера с крупными резными листьями — выразительный элемент для зонирования пространства; поставляется в фактурном кашпо под камень', price: 1900, images: ['цветы/3.png', 'цветы/31.jpg'], badge: 'Новинка', sku: 'DEC-FLW-003', color: 'Зелёный', material: 'Винил', style: 'Современный', specs: { 'Артикул': 'DEC-FLW-003', 'Тип': 'Искусственное растение (монстера)', 'Высота': '60 см', 'Кашпо': 'Пластик с фактурой камня, серый цвет, диаметр 18 см', 'Цвет': 'Тёмно‑зелёный с глянцевым эффектом', 'Материал листьев': 'Плотный винил с проработкой прожилок', 'Особенности': 'Реалистичная форма листьев с характерными прорезями, устойчивая конструкция, не требует полива, готовое решение для интерьера' } },
+            { id: 14, subcat: 'Искусственные цветы', title: 'Орхидея «Нежная гармония»', shortDesc: 'Белая орхидея в керамическом кашпо', desc: 'Изысканная искусственная орхидея с белоснежными цветками — утончённый акцент для интерьера; поставляется в элегантном керамическом кашпо', price: 1450, images: ['цветы/4.png', 'цветы/41.jpg'], sku: 'DEC-FLW-004', color: 'Белый', material: 'Силикон', style: 'Классика', specs: { 'Артикул': 'DEC-FLW-004', 'Тип': 'Искусственный цветок (орхидея фаленопсис)', 'Высота': '40 см', 'Кашпо': 'Керамика, гладкая, белый цвет, диаметр 12 см', 'Цвет': 'Белый с кремовыми сердцевинами', 'Материал цветков': 'Мягкий силикон, лепестки с полупрозрачным эффектом', 'Особенности': 'Естественная форма бутонов, реалистичная имитация стеблей, не вызывает аллергии, готовое решение для декора' } },
+
+            // Вазы
+            { id: 15, subcat: 'Вазы', title: 'Ваза «Лунное серебро»', shortDesc: 'Стекло с эффектом металла, серебристая', desc: 'Стеклянная ваза с эффектом металла — серебристо‑серая поверхность и лаконичная форма; оптимальна для одиночных крупных цветов или стильных сухих композиций', price: 2600, images: ['вазы/1.png', 'вазы/11.jpeg'], badge: 'Хит', sku: 'DEC-VAS-001', color: 'Серебристый', material: 'Стекло', style: 'Современный', specs: { 'Артикул': 'DEC-VAS-001', 'Материал': 'Стекло с металлизированным покрытием', 'Цвет': 'Серебристо‑серый', 'Высота': '25 см', 'Диаметр горла': '8 см', 'Диаметр основания': '12 см', 'Объём': '≈1,8 л', 'Особенности': 'Эффект металла, устойчивое дно, гладкая фактура' } },
+            { id: 21, subcat: 'Вазы', title: 'Ваза «Бабл-гам»', shortDesc: 'Розовое стекло с выпуклостями', desc: 'Стеклянная ваза нежно‑розового цвета с фактурными выпуклостями — акцентный декор для романтичных букетов и интерьерных композиций', price: 1800, images: ['вазы/2.png', 'вазы/21.jpeg'], sku: 'DEC-VAS-002', color: 'Розовый', material: 'Стекло', style: 'Современный', specs: { 'Артикул': 'DEC-VAS-002', 'Материал': 'Стекло', 'Цвет': 'Розовый', 'Высота': '22 см', 'Диаметр горла': '7 см', 'Максимальный диаметр корпуса': '14 см', 'Объём': '≈1,5 л', 'Особенности': 'Фактурные выпуклости, полупрозрачность, выразительная текстура' } },
+            { id: 22, subcat: 'Вазы', title: 'Ваза «Прозрачная мини»', shortDesc: 'Прозрачное стекло, 15 см', desc: 'Небольшая прозрачная стеклянная ваза — универсальный декор для небольших букетов, сухоцветов или одиночных веточек', price: 750, images: ['вазы/3.png', 'вазы/31.jpeg'], sku: 'DEC-VAS-003', color: 'Прозрачный', material: 'Стекло', style: 'Минимализм', specs: { 'Артикул': 'DEC-VAS-003', 'Материал': 'Прозрачное стекло', 'Цвет': 'Прозрачный', 'Высота': '15 см', 'Диаметр горла': '6 см', 'Диаметр основания': '8 см', 'Объём': '≈0,6 л', 'Особенности': 'Компактный размер, гладкая поверхность, лаконичный дизайн' } },
+            { id: 47, subcat: 'Вазы', title: 'Ваза «Тёмный рельеф»', shortDesc: 'Керамика, тёмная, ребристые бока', desc: 'Керамическая ваза тёмного цвета с ребристыми боками — выразительная фактура и матовое покрытие для современных и минималистичных интерьеров', price: 2100, images: ['вазы/4.png', 'вазы/41.jpeg'], badge: 'Новинка', sku: 'DEC-VAS-004', color: 'Чёрный', material: 'Керамика', style: 'Минимализм', specs: { 'Артикул': 'DEC-VAS-004', 'Материал': 'Керамика', 'Цвет': 'Тёмный графит', 'Высота': '28 см', 'Диаметр горла': '9 см', 'Максимальный диаметр корпуса': '16 см', 'Объём': '≈2,3 л', 'Особенности': 'Ребристые бока, матовое покрытие, устойчивое дно, ручная глазуровка' } },
+
+            // Лампы
+            { id: 16, subcat: 'Настольные лампы', title: 'Лампа «Ажурное цветение»', shortDesc: 'Винтажная лампа-цветок, приглушённый свет', desc: 'Винтажная настольная лампа в виде распускающегося цветка — создаёт мягкий рассеянный свет и становится изящным акцентом в интерьере', price: 3400, images: ['лампы/1.png', 'лампы/1.jpg'], badge: 'Хит', sku: 'LGT-001', color: 'Белый', material: 'Металл', style: 'Винтаж', specs: { 'Артикул': 'LGT-001', 'Стиль': 'Винтаж', 'Форма': 'Цветок с ажурными лепестками', 'Свет': 'Приглушённый, тёплый', 'Цоколь': 'E14', 'Материал': 'Пластик, металл', 'Особенности': 'Цветочный дизайн' } },
+            { id: 17, subcat: 'Настольные лампы', title: 'Лампа «Витражное сияние»', shortDesc: 'Тиффани, витражный абажур', desc: 'Винтажная лампа в стиле Тиффани — витражный абажур из цветного пластика создаёт эффектные световые узоры и наполняет комнату тёплым мерцанием', price: 4900, images: ['лампы/2.png', 'лампы/2.jpeg'], sku: 'LGT-002', color: 'Разноцветный', material: 'Стекло', style: 'Винтаж', specs: { 'Артикул': 'LGT-002', 'Стиль': 'Тиффани', 'Абажур': 'Витраж из цветного пластика', 'Цоколь': 'E27', 'Материал': 'Медь, пластик', 'Особенности': 'Цветное освещение, устойчивая база' } },
+            { id: 18, subcat: 'Настольные лампы', title: 'Лампа «Зелёная геометрия»', shortDesc: 'Минимализм, глубокий зелёный', desc: 'Современная минималистичная лампа лаконичной формы — выразительный акцент в стиле минимализм с глубоким зелёным оттенком', price: 3200, images: ['лампы/3.png', 'лампы/3.jpeg'], sku: 'LGT-003', color: 'Зелёный', material: 'Металл', style: 'Минимализм', specs: { 'Артикул': 'LGT-003', 'Стиль': 'Минимализм', 'Цвет': 'Глубокий зелёный', 'Цоколь': 'E14', 'Материал': 'Металл', 'Особенности': 'Компактные габариты, универсальный дизайн' } },
+            { id: 19, subcat: 'Настольные лампы', title: 'Лампа «Лесной гриб»', shortDesc: 'Лампа-гриб, две расцветки', desc: 'Оригинальная лампа в форме гриба — уютный элемент декора в двух цветовых решениях для создания расслабленной атмосферы', price: 2800, images: ['лампы/4.png', 'лампы/41.png'], badge: 'Новинка', sku: 'LGT-004', color: 'Розовый', material: 'Металл', style: 'Современный', specs: { 'Артикул': 'LGT-004', 'Форма': 'Гриб с округлым куполом', 'Цвета': 'Оливково‑зелёный / розово‑бордовый', 'Цоколь': 'E14', 'Материал': 'Металл', 'Особенности': 'Глянцевая фактура, устойчивая база, компактный размер' } },
+            { id: 20, subcat: 'Настольные лампы', title: 'Лампа «Библиотечный свет»', shortDesc: 'Библиотечная лампа', desc: 'Классическая библиотечная лампа — воплощение элегантной ретро‑эстетики и комфортного направленного освещения', price: 4200, images: ['лампы/5.png', 'лампы/5.jpeg'], sku: 'LGT-005', color: 'Белый', material: 'Металл', style: 'Классика', specs: { 'Артикул': 'LGT-005', 'Стиль': 'Библиотечный', 'Абажур': 'Металлический с матовым покрытием', 'Цвет': 'Молочный', 'Цоколь': 'E27', 'Материал': 'Сталь, латунь', 'Особенности': 'Регулируемая стойка, поворотный механизм, винтажные детали' } },
+
+            // Шторы
+            { id: 23, subcat: 'Шторы', title: 'Штора «Пудра»', desc: 'Нежно-розовые шторы с декоративной оборкой, мягкая драпировка', price: 2900, images: ['шторы/1.jpg', 'шторы/11.jpeg', 'шторы/13.jpeg'], badge: 'Хит', sku: 'TXT-SHT-001', color: 'Розовый', material: 'Лён', style: 'Классика', specs: { 'Артикул': 'TXT-SHT-001', 'Размер': '200×260 см', 'Материал': 'Лён 100%', 'Крепление': 'Шторная лента', 'Цвет': 'Пыльная роза', 'Светопроницаемость': 'Полупрозрачная', 'Особенности': 'Декоративная оборка по нижнему краю' } },
+            { id: 24, subcat: 'Шторы', title: 'Штора «Прованс»', shortDesc: 'В полоску, бежево-розовые', desc: 'Шторы в полоску с каймой, тёплый бежево-розовый оттенок', price: 4200, images: ['шторы/21.jpg', 'шторы/2.jpg', 'шторы/23.jpg'], sku: 'TXT-SHT-002', color: 'Бежевый', material: 'Полиэстер', style: 'Прованс', specs: { 'Артикул': 'TXT-SHT-002', 'Размер': '200×260 см', 'Материал': 'Полиэстер', 'Крепление': 'Шторная лента', 'Цвет': 'Бежево-розовый', 'Светопроницаемость': 'Рассеивающая', 'Особенности': 'Контрастная кайма, вертикальная полоска' } },
+            { id: 25, subcat: 'Шторы', title: 'Штора «Цветущий сад»', shortDesc: 'Лёгкие, цветочный принт', desc: 'Лёгкие шторы с цветочным принтом, наполняют комнату светом', price: 2700, images: ['шторы/3.jpg', 'шторы/31.jpg', 'шторы/32.jpg'], badge: 'Новинка', sku: 'TXT-SHT-003', color: 'Белый', material: 'Лён', style: 'Прованс', specs: { 'Артикул': 'TXT-SHT-003', 'Размер': '180×250 см', 'Материал': 'Лён', 'Крепление': 'Шторная лента', 'Цвет': 'Кремовый с флористическим принтом', 'Светопроницаемость': 'Прозрачная', 'Особенности': 'Нежный цветочный мотив' } },
+            { id: 26, subcat: 'Шторы', title: 'Штора «Классика»', shortDesc: 'Двухслойные, с подхватами', desc: 'Двухслойные шторы: плотный верх и светлый подхват, элегантная классика', price: 4100, images: ['шторы/4.jpg', 'шторы/41.jpg', 'шторы/42.jpg'], sku: 'TXT-SHT-004', color: 'Бежевый', material: 'Шенилл', style: 'Классика', specs: { 'Артикул': 'TXT-SHT-004', 'Размер': '200×260 см', 'Материал': 'Сочетание тканей (шенилл + подкладка)', 'Крепление': 'Шторная лента, подхваты в комплекте', 'Цвет': 'Бежевый / молочный', 'Светопроницаемость': 'Непрозрачная', 'Особенности': 'Комплект с подхватами, эффект двойного слоя' } },
+            { id: 27, subcat: 'Шторы', title: 'Штора «Викториана»', shortDesc: 'Орнамент в духе Морриса', desc: 'Шторы с орнаментальным принтом в духе Уильяма Морриса, глубокий сине-зелёный узор', price: 4400, images: ['шторы/5.jpg', 'шторы/51.jpg', 'шторы/52.jpg'], sku: 'TXT-SHT-005', color: 'Синий', material: 'Хлопок', style: 'Классика', specs: { 'Артикул': 'TXT-SHT-005', 'Размер': '200×260 см', 'Материал': 'Хлопок (сатин)', 'Крепление': 'Шторная лента', 'Цвет': 'Сине-бирюзовый орнамент на молочном фоне', 'Светопроницаемость': 'Полупрозрачная', 'Особенности': 'Крупный растительно-птичий орнамент по всей длине' } },
+
+            // Органайзеры
+            { id: 28, subcat: 'Органайзеры', title: 'Органайзер «Плетёное сердце»', shortDesc: 'Плетёная корзина с декором-сердечками', desc: 'Плетёная корзина из натуральных волокон с декором в виде сердечек, для хранения мелочей и аксессуаров', price: 1500, images: ['органайзеры/1.png', 'органайзеры/11.jpeg'], badge: 'Хит', sku: 'STR-ORG-001', color: 'Бежевый', material: 'Ротанг', style: 'Эко', specs: { 'Артикул': 'STR-ORG-001', 'Размер': '30×20×10 см', 'Материал': 'Ротанг/натуральное волокно', 'Цвет': 'Беж с розовыми акцентами', 'Особенности': 'Декор в виде сердечек, ручки для переноски', 'Назначение': 'Для мелочей, косметики, аксессуаров' } },
+            { id: 29, subcat: 'Органайзеры', title: 'Органайзер «Облако»', shortDesc: 'Мягкий текстильный, молочный', desc: 'Мягкий текстильный органайзер с лаконичным дизайном, идеален для хранения белья и текстиля', price: 860, images: ['органайзеры/22.png', 'органайзеры/23.jpeg'], sku: 'STR-ORG-002', color: 'Белый', material: 'Текстиль', style: 'Минимализм', specs: { 'Артикул': 'STR-ORG-002', 'Размер': '35×35×30 см', 'Материал': 'Ротанг/натуральное волокно с подкладкой', 'Цвет': 'Молочный', 'Особенности': 'Мягкие стенки, устойчивая форма', 'Назначение': 'Идеален для косметики, ванных принадлежностей' } },
+            { id: 30, subcat: 'Органайзеры', title: 'Органайзер «Ячейки»', 
+              variants: ['Розовый', 'Голубой', 'Чёрный'],
+              shortDesc: 'Металл', desc: 'Компактный органайзер с ячейками для сортировки мелочей, подходит для ящиков комода и стола', price: 900, images: ['органайзеры/4.png', 'органайзеры/5.png', 'органайзеры/6.png', 'органайзеры/41.jpeg'], badge: 'Новинка', sku: 'STR-ORG-003', color: 'Розовый', material: 'Металл', style: 'Современный', specs: { 'Артикул': 'STR-ORG-003', 'Размер': '40×30×8 см', 'Материал': 'Металл, ручка из пластика', 'Цвет': 'Розовый, голубой, черный', 'Особенности': 'Удобная ручка для переноса', 'Назначение': 'Для канцелярии, косметики, украшений' } },
+            { id: 31, subcat: 'Органайзеры', title: 'Органайзер «Универсал»', shortDesc: 'Розовый, пластик', desc: 'Пластиковый органайзер с отсеками и выдвижными ящечками', price: 1100, images: ['органайзеры/3.png', 'органайзеры/31.jpeg'], sku: 'STR-ORG-004', color: 'Розовый', material: 'Пластик', style: 'Современный', specs: { 'Артикул': 'STR-ORG-004', 'Размер': '32×20×15 см', 'Материал': 'Пластик', 'Цвет': 'Розовый', 'Особенности': 'Выдвижные ящики', 'Назначение': 'Для украшений, канцелярии, хозяйственных мелочей' } },
+            { id: 32, subcat: 'Органайзеры', title: 'Набор органайзеров «Зелёное плетение»', shortDesc: 'В наборе 3 шт., разный размер', desc: 'Подвесной текстильно-сетчатый органайзер в стиле лофт, для хранения мелких предметов и аксессуаров', price: 1350, images: ['органайзеры/7.png', 'органайзеры/8.jpeg'], sku: 'STR-ORG-005', color: 'Зелёный', material: 'Ротанг', style: 'Эко', specs: { 'Артикул': 'STR-ORG-005', 'Размер': '28×28×24 см, 24×24×20 см, 20×20×16 см', 'Материал': 'Ротанг + текстильные волокна', 'Цвет': 'Зелёно‑оливковый в плетении плюс бежево‑кремовые акценты', 'Особенности': 'Набор из трёх корзин разного размера', 'Назначение': 'Для прихожей, ванной, гардеробной' } },
+
+            // Коробки
+            { id: 33, subcat: 'Коробки', title: 'Коробка «Винтаж»', shortDesc: 'Картон с тиснёным узором', desc: 'Картонная коробка с тиснёным узором в ретро‑стиле, для хранения сезонных вещей и документов', price: 450, images: ['коробки/1.png', 'коробки/11.jpeg'], badge: 'Хит', sku: 'STR-BOX-001', color: 'Бежевый', material: 'Картон', style: 'Винтаж', specs: { 'Артикул': 'STR-BOX-001', 'Размер': '30×30×30 см', 'Материал': 'Плотный картон с ламинацией', 'Цвет': 'Крафт с бежевым орнаментом', 'Особенности': 'Тиснёный узор', 'Назначение': 'Для документов, текстиля, сезонных аксессуаров' } },
+            { id: 34, subcat: 'Коробки', title: 'Коробка «Стандарт»', shortDesc: 'Тканевая отделка, розовая', desc: 'Мягкая коробка с тканевой отделкой', price: 500, images: ['коробки/2.png', 'коробки/21.jpeg'], sku: 'STR-BOX-002', color: 'Розовый', material: 'Ткань', style: 'Минимализм', specs: { 'Артикул': 'STR-BOX-002', 'Размер': '35×25×20 см', 'Материал': 'Хлопковая ткань + картонная основа', 'Цвет': 'Нежно-розовый', 'Особенности': 'Откидная крышка, ручка, прямоугольная форма, лаконичный дизайн', 'Назначение': 'Для белья, трикотажа, детских вещей' } },
+            { id: 35, subcat: 'Коробки', title: 'Коробка «Элегант»', shortDesc: 'Текстильная корзина‑куб с ручкой', desc: 'Прозрачная коробка с плотной крышкой и ручкой, для быстрой идентификации содержимого', price: 980, images: ['коробки/3.png', 'коробки/31.jpeg'], badge: 'Новинка', sku: 'STR-BOX-003', color: 'Бежевый', material: 'Ткань', style: 'Минимализм', specs: { 'Артикул': 'STR-BOX-003', 'Размер': '40×30×25 см', 'Материал': 'плотная ткань с плетёной фактурой (имитация ротанга/джута), внутренняя отделка — гладкий текстиль', 'Цвет': 'бежевый с лёгким кремовым подтоном', 'Особенности': 'Универсальный дизайн — впишется в сканди, эко, минимализм, прованс', 'Назначение': 'Для текстиля, обуви' } },
+            { id: 36, subcat: 'Коробки', title: 'Коробка «Эстет»', shortDesc: 'Дерево с патиной', desc: 'Деревянная коробка с патинированной отделкой, для хранения украшений и памятных мелочей', price: 1100, images: ['коробки/4.png', 'коробки/4.jpg'], sku: 'STR-BOX-004', color: 'Коричневый', material: 'Ротанг', style: 'Эко', specs: { 'Артикул': 'STR-BOX-004', 'Размер': '32×22×18 см', 'Материал': 'Ротанг', 'Цвет': 'Тёплый коричнево‑бежевый', 'Особенности': 'лёгкий вес при достаточной прочности и выразительная плетёная текстура', 'Назначение': 'Для хранения вещей или декора' } },
+            { id: 37, subcat: 'Коробки', title: 'Коробка «Невидимый помощник»', shortDesc: 'Светло‑серый фон с орнаментом', desc: 'Металлическая коробка в стиле лофт с контрастной фурнитурой, для хранения инструментов и аксессуаров', price: 600, images: ['коробки/5.png', 'коробки/51.jpeg'], sku: 'STR-BOX-005', color: 'Серый', material: 'Полиэстер', style: 'Лофт', specs: { 'Артикул': 'STR-BOX-005', 'Размер': '35×25×15 см', 'Материал': 'полиэстер, каркас из полипропилена', 'Цвет': 'Серый', 'Особенности': 'Плотная крышка надёжно защищает содержимое от пыли', 'Назначение': 'хранения сезонной одежды' } },
+
+            // Свечи
+            { id: 38, subcat: 'Ароматические свечи', title: 'Свеча «Розовый сад»', shortDesc: 'Аромат роз, стакан с цветочным узором', desc: 'Нежный аромат свежих роз в стеклянном стакане с цветочным узором — для создания романтической атмосферы', price: 1150, images: ['свечи/1.png', 'свечи/11.jpeg'], badge: 'Хит', sku: 'ARO-CND-001', color: 'Розовый', material: 'Соевый воск', style: 'Классика', specs: { 'Артикул': 'ARO-CND-001', 'Аромат': 'Свежесрезанные розы с лёгкими нотами пиона', 'Объём': '200 мл', 'Материал': '100% соевый воск премиального качества', 'Фитиль': 'Хлопковый, один', 'Время горения': 'до 40 часов', 'Особенности': 'Ручная заливка, экологичный состав' } },
+            { id: 39, subcat: 'Ароматические свечи', title: 'Свеча «Карамельный попкорн»', shortDesc: 'Попкорн и карамель, полосатый стакан', desc: 'Уютный аромат тёплого попкорна с карамельной глазурью в стильном полосатом стакане', price: 970, images: ['свечи/2.png', 'свечи/21.jpeg'], sku: 'ARO-CND-002', color: 'Бежевый', material: 'Соевый воск', style: 'Современный', specs: { 'Артикул': 'ARO-CND-002', 'Аромат': 'Тёплый попкорн, сливочная карамель, ваниль', 'Объём': '200 мл', 'Материал': 'Соевый воск с растительными добавками', 'Фитиль': 'Хлопковый, один', 'Время горения': 'до 40 часов', 'Особенности': 'Без фталатов и парафина, подходит для жилых помещений' } },
+            { id: 40, subcat: 'Ароматические свечи', title: 'Свеча «Золотая ночь»', shortDesc: 'Сандал и амбра, 3 фитиля', desc: 'Роскошный древесно-пряный аромат в золотистом стакане — акцентная свеча с мультифитильной системой', price: 3900, images: ['свечи/3.png', 'свечи/31.jpeg'], badge: 'Новинка', sku: 'ARO-CND-003', color: 'Золотой', material: 'Кокосовый воск', style: 'Классика', specs: { 'Артикул': 'ARO-CND-003', 'Аромат': 'Сандал, амбра, чёрный перец, корица', 'Объём': '400 мл', 'Материал': 'Кокосовый воск высокой плотности', 'Фитиль': 'Три хлопковых фитиля', 'Время горения': 'до 60 часов', 'Особенности': 'Равномерное плавление, насыщенный шлейф, премиальная упаковка' } },
+            { id: 41, subcat: 'Ароматические свечи', title: 'Свеча «Розовый кристалл»', shortDesc: 'Пион и мускус, соляные камни', desc: 'Цветочно-мускусный аромат в окружении розовых соляных камней — гармония уюта и эстетики', price: 3200, images: ['свечи/4.png', 'свечи/41.jpeg'], sku: 'ARO-CND-004', color: 'Розовый', material: 'Соевый воск', style: 'Современный', specs: { 'Артикул': 'ARO-CND-004', 'Аромат': 'Пион, мускус, белая ваниль, фрезия', 'Объём': '250 мл', 'Материал': 'Соевый воск холодного прессования', 'Фитиль': 'Хлопковый, один', 'Декор': 'Натуральные розовые соляные камни', 'Особенности': 'Гипоаллергенный состав, не содержит синтетических отдушек' } },
+           { id: 42, subcat: 'Ароматические свечи', title: 'Свеча La Jolie Muse «Индия»', 
+              variants: ['Розовый', 'Зелёный'],
+              shortDesc: 'Индийские специи, 2 цвета', desc: 'Экзотический аромат индийских специй и сандала в двухцветном оформлении — лимитированная серия от La Jolie Muse', price: 2600, images: ['свечи/5.png', 'свечи/6.png'], badge: 'Хит', sku: 'ARO-CND-005', color: 'Розовый', material: 'Соевый воск', style: 'Классика', specs: { 'Артикул': 'ARO-CND-005', 'Бренд': 'La Jolie Muse', 'Аромат': 'Индийские специи, сандал, пачули, ладан', 'Объём': '300 мл', 'Цвета': 'Розовый, зелёный', 'Фитиль': 'Два хлопковых фитиля', 'Особенности': 'Авторская композиция, ручная работа, лимитированный выпуск' } },
+            // Гирлянды
+            { id: 43, subcat: 'Гирлянды', title: 'Гирлянда «Звёздное небо»', shortDesc: 'Звёзды, на выбор 1–3 шт.', desc: 'Объёмные звёзды с ажурным узором создают атмосферу волшебства — выберите композицию из 1, 2 или 3 звёзд для акцентного декора', price: 1100, images: ['гирлянда/1.jpg', 'гирлянда/11.jpg'], badge: 'Хит', sku: 'LGT-GRL-001', color: 'Белый', material: 'Картон', style: 'Современный', specs: { 'Артикул': 'LGT-GRL-001', 'Длина': '2 м', 'Питание': 'USB (кабель в комплекте)', 'Режим': 'Тёплый постоянный свет', 'Варианты': '1, 2 или 3 звезды', 'Материал': 'Плотный картон с перфорацией', 'Особенности': 'Лёгкая сборка, крепление на подвесах' } },
+            { id: 44, subcat: 'Гирлянды', title: 'Гирлянда «Праздничный салют»', shortDesc: 'Эффект салюта, мерцание', desc: 'Динамичная гирлянда с эффектом вспыхивающих огней — имитация салюта для создания яркого праздничного настроения', price: 990, images: ['гирлянда/2.jpg', 'гирлянда/21.jpg'], sku: 'LGT-GRL-002', color: 'Золотой', material: 'Полимер', style: 'Современный', specs: { 'Артикул': 'LGT-GRL-002', 'Длина': '3 м', 'Питание': 'USB (кабель в комплекте)', 'Режим': 'Мерцание с эффектом разлетающихся искр', 'Цвет': 'Тёплый белый + золотистые акценты', 'Материал': 'Прозрачный полимер, светодиоды', 'Особенности': 'Энергосберегающие LED-лампы, защита от перегрева' } },
+            { id: 45, subcat: 'Гирлянды', title: 'Гирлянда «Цветочная россыпь»', shortDesc: 'Объёмные цветы, тёплый свет', desc: 'Нежные объёмные цветы с мягким свечением — деликатный декор для спальни, детской или свадебного оформления', price: 850, images: ['гирлянда/3.jpg', 'гирлянда/31.jpg'], badge: 'Новинка', sku: 'LGT-GRL-003', color: 'Белый', material: 'Пластик', style: 'Классика', specs: { 'Артикул': 'LGT-GRL-003', 'Длина': '2 м', 'Питание': 'Батарейки типа AA (3 шт., не в комплекте)', 'Режим': 'Постоянный тёплый свет', 'Цвет': 'Тёплый белый с розоватым подтоном', 'Материал': 'Пластик, проволока, светодиоды', 'Особенности': 'Гибкая основа, цветы съёмные, ручная сборка' } },
+            { id: 46, subcat: 'Гирлянды', title: 'Гирлянда «Облако из шаров»', shortDesc: 'Шары разного диаметра', desc: 'Воздушные шары с фактурной поверхностью и мягким свечением — уютный декор для фотозоны, детской или праздничного интерьера', price: 790, images: ['гирлянда/4.jpg', 'гирлянда/41.jpg'], sku: 'LGT-GRL-004', color: 'Бежевый', material: 'Хлопок', style: 'Современный', specs: { 'Артикул': 'LGT-GRL-004', 'Длина': '1,5 м', 'Питание': 'USB (кабель в комплекте)', 'Режим': 'Постоянный тёплый свет', 'Цвет': 'Кремово‑бежевый', 'Материал': 'Хлопковая нить, светодиоды', 'Особенности': 'Шары разного диаметра, лёгкая драпировка, не нагревается' } },
+
+            // Новый год
+            { id: 48, subcat: 'Новый год', title: 'Ёлочный шар «Красный»', shortDesc: 'Стеклянный шар', desc: 'Стеклянный ёлочный шар — классическое украшение для новогодней ёлки', price: 450, images: ['новыйгод/1.png'], badge: 'Хит', sku: 'NY-TREE-001', color: 'Красный', material: 'Стекло', style: 'Классика', specs: { 'Артикул': 'NY-TREE-001', 'Диаметр': '8 см', 'Материал': 'Стекло', 'Цвет': 'Красный' } },
+            { id: 49, subcat: 'Новый год', title: 'Ёлочный шар «Золото»', shortDesc: 'Золотистый, с блёстками', desc: 'Ёлочный шар золотистого цвета с блёстками — праздничный акцент', price: 550, images: ['новыйгод/2.png'], sku: 'NY-TREE-002', color: 'Золотой', material: 'Пластик', style: 'Классика', specs: { 'Артикул': 'NY-TREE-002', 'Диаметр': '8 см', 'Материал': 'Пластик', 'Цвет': 'Золото' } },
+            { id: 50, subcat: 'Новый год', title: 'Набор ёлочных игрушек «Зима»', shortDesc: '6 шаров в наборе', desc: 'Набор из 6 ёлочных шаров в зимней гамме', price: 1900, images: ['новыйгод/3.png'], badge: 'Новинка', sku: 'NY-TREE-003', color: 'Синий', material: 'Стекло', style: 'Классика', specs: { 'Артикул': 'NY-TREE-003', 'Количество': '6 шт.', 'Материал': 'Стекло, велюр', 'Цвета': 'Синий, серебро, голубой' } },
+            { id: 52, subcat: 'Новый год', title: 'Гирлянда «Снежинки»', shortDesc: 'Снежинки с подсветкой', desc: 'Гирлянда со снежинками и мягкой подсветкой', price: 790, images: ['новыйгод/4.jpg'], sku: 'NY-GRL-002', color: 'Белый', material: 'Пластик', style: 'Современный', specs: { 'Артикул': 'NY-GRL-002', 'Длина': '3 м', 'Питание': 'Батарейки', 'Цвет': 'Теплый белый' } },
+            { id: 53, subcat: 'Новый год', title: 'Свеча «Новогодняя ночь»', shortDesc: 'Аромат корицы и апельсина', desc: 'Ароматическая свеча с запахом корицы и апельсина — для праздничного настроения', price: 990, images: ['новыйгод/5.png'], sku: 'NY-DEC-001', color: 'Красный', material: 'Соевый воск', style: 'Классика', specs: { 'Артикул': 'NY-DEC-001', 'Аромат': 'Корица, апельсин', 'Объём': '200 мл' } },
+            { id: 54, subcat: 'Новый год', title: 'Новогодний венок', shortDesc: 'Хвойный венок с лентой', desc: 'Новогодний венок из искусственной хвои с декоративной лентой', price: 1600, images: ['новыйгод/6.png'], badge: 'Новинка', sku: 'NY-DEC-002', color: 'Зелёный', material: 'Искусственная хвоя', style: 'Классика', specs: { 'Артикул': 'NY-DEC-002', 'Диаметр': '30 см', 'Материал': 'Искусственная хвоя', 'Декор': 'Лента, шишки' } },
+
+            // Пледы
+            { id: 55, subcat: 'Пледы', title: 'Плед «Белый текстурный»', shortDesc: 'Плюшевый, белый, текстурный', desc: 'Плюшевый плед белого цвета с выразительной текстурой — мягкий и тёплый', price: 1200, images: ['пледы/1.png'], badge: 'Хит', sku: 'TXT-PLD-001', color: 'Белый', material: 'Плюш', style: 'Современный', specs: { 'Артикул': 'TXT-PLD-001', 'Размер': '180×200 см', 'Материал': 'Плюш', 'Цвет': 'Белый', 'Особенности': 'Текстурная поверхность' } },
+            { id: 56, subcat: 'Пледы', title: 'Плед «Тёмно-коричневая клетка»', shortDesc: 'Плюшевый, тёмно-коричневый с бежевой клеткой', desc: 'Плюшевый плед тёмно-коричневого цвета с бежевой клеткой — уютный акцент', price: 1300, images: ['пледы/2.png'], sku: 'TXT-PLD-002', color: 'Коричневый', material: 'Плюш', style: 'Классика', specs: { 'Артикул': 'TXT-PLD-002', 'Размер': '180×200 см', 'Материал': 'Плюш', 'Цвет': 'Тёмно-коричневый с бежевой клеткой', 'Особенности': 'Мягкая текстура, клетчатый рисунок' } },
+            { id: 57, subcat: 'Пледы', title: 'Плед «Беж леопард»', shortDesc: 'Плюшевый, беж с леопардовым принтом', desc: 'Плюшевый плед бежевого цвета с леопардовым принтом — выразительный декор', price: 1400, images: ['пледы/3.png'], badge: 'Новинка', sku: 'TXT-PLD-003', color: 'Бежевый', material: 'Плюш', style: 'Современный', specs: { 'Артикул': 'TXT-PLD-003', 'Размер': '180×200 см', 'Материал': 'Плюш', 'Цвет': 'Бежевый с леопардовым принтом', 'Особенности': 'Животный принт, мягкая фактура' } },
+            { id: 58, subcat: 'Пледы', title: 'Плед «Тёмно-бордовый»', shortDesc: 'Плюшевый, тёмно-бордовый, текстурный', desc: 'Плюшевый плед тёмно-бордового цвета с текстурной поверхностью', price: 1300, images: ['пледы/4.png'], sku: 'TXT-PLD-004', color: 'Бордовый', material: 'Плюш', style: 'Современный', specs: { 'Артикул': 'TXT-PLD-004', 'Размер': '180×200 см', 'Материал': 'Плюш', 'Цвет': 'Тёмно-бордовый', 'Особенности': 'Текстурная поверхность' } },
+            { id: 59, subcat: 'Пледы', title: 'Плед «Красно-бежевая клетка»', shortDesc: 'Плюшевый, красно-бежевая клетка', desc: 'Плюшевый плед с красно-бежевым клетчатым узором — классический уют', price: 1200, images: ['пледы/5.png'], sku: 'TXT-PLD-005', color: 'Красный', material: 'Плюш', style: 'Классика', specs: { 'Артикул': 'TXT-PLD-005', 'Размер': '180×200 см', 'Материал': 'Плюш', 'Цвет': 'Красный с бежевой клеткой', 'Особенности': 'Клетчатый рисунок, мягкая текстура' } },
+
+            // Диффузоры
+            { id: 60, subcat: 'Диффузоры', title: 'Диффузор SOHO HOUSE Rose Water', shortDesc: 'Розовая вода, прозрачное стекло', desc: 'Элегантный минималистичный диффузор в прозрачном стеклянном флаконе с лаконичной светло-серой этикеткой и чёрной крышкой. Аромат «Rose Water» — нежный, цветочный, с лёгкой прохладой и едва уловимой сладостью. Подходит для спальни, ванной или туалетного столика.', price: 1900, images: ['диффузоры/5.jpg'], badge: 'Хит', sku: 'ARO-DFS-001', color: 'Прозрачный', material: 'Стекло', style: 'Минимализм', specs: { 'Артикул': 'ARO-DFS-001', 'Бренд': 'SOHO HOUSE', 'Аромат': 'Rose Water', 'Объём': '200 мл', 'Материал флакона': 'Прозрачное стекло', 'Палочки': 'Чёрные тростниковые' } },
+            { id: 61, subcat: 'Диффузоры', title: 'Диффузор BOTANICA Aroma of Life', shortDesc: 'Травяные ноты, янтарное стекло', desc: 'Сдержанный и уютный диффузор в тёмно-янтарном стекле с кремовой этикеткой. Аромат строится на травяных, зелёных или цветочных нотах. Отлично впишется в гостиную, кабинет или зону отдыха в стиле эко, сканди или минимализм.', price: 2400, images: ['диффузоры/1.jpg'], sku: 'ARO-DFS-002', color: 'Коричневый', material: 'Стекло', style: 'Эко', specs: { 'Артикул': 'ARO-DFS-002', 'Бренд': 'BOTANICA', 'Аромат': 'Aroma of Life', 'Объём': '200 мл', 'Материал флакона': 'Янтарное стекло', 'Палочки': 'Чёрные тростниковые' } },
+            { id: 62, subcat: 'Диффузоры', title: 'Диффузор CHÉ LUX Fresh Coffee', shortDesc: 'Кофе, ваниль, клён', desc: 'Стильный диффузор в квадратном флаконе из янтарного стекла с чёрной матовой крышкой. Аромат «Fresh Coffee» сочетает бодрящие кофейные ноты с мягкой ванилью и тёплым кленовым оттенком. Идеален для кухни, столовой, прихожей или рабочего пространства.', price: 1700, images: ['диффузоры/2.jpg'], badge: 'Новинка', sku: 'ARO-DFS-003', color: 'Коричневый', material: 'Стекло', style: 'Современный', specs: { 'Артикул': 'ARO-DFS-003', 'Бренд': 'CHÉ LUX', 'Аромат': 'Fresh Coffee (Coffee + Vanilla + Maple)', 'Объём': '200 мл', 'Материал флакона': 'Янтарное стекло', 'Палочки': 'Чёрные тростниковые' } },
+            { id: 63, subcat: 'Диффузоры', title: 'Диффузор SUBLIME PATCHOULI', shortDesc: 'Пачули, орхидея, инжир', desc: 'Нежный и натуральный диффузор в прозрачном стеклянном цилиндре с минималистичной светлой этикеткой и пробковой крышкой. Аромат «Rich Patchouli» — глубокий, землисто-пряный, смягчённый сладкими оттенками орхидеи и инжира. Хорошо смотрится в спальне, гардеробной или лаунж-зоне.', price: 2100, images: ['диффузоры/3.jpg'], sku: 'ARO-DFS-004', color: 'Прозрачный', material: 'Стекло', style: 'Эко', specs: { 'Артикул': 'ARO-DFS-004', 'Бренд': 'SUBLIME', 'Аромат': 'Rich Patchouli with Sweet Hints of Orchid and Fig', 'Объём': '200 мл', 'Материал флакона': 'Прозрачное стекло', 'Палочки': 'Светлые древесные', 'Крышка': 'Пробковая' } },
+            { id: 64, subcat: 'Диффузоры', title: 'Диффузор CHÉ LUX Abundance', shortDesc: 'Лимон, лён, ваниль', desc: 'Современный диффузор в прозрачном квадратном флаконе с чёрной крышкой и графичной этикеткой. Аромат «Abundance» сочетает свежий лимон, чистый запах выстиранного на воздухе белья (linen) и мягкую ваниль. Отлично подойдёт для ванной, прихожей, гардеробной или гостиной.', price: 1700, images: ['диффузоры/4.jpg'], sku: 'ARO-DFS-005', color: 'Прозрачный', material: 'Стекло', style: 'Современный', specs: { 'Артикул': 'ARO-DFS-005', 'Бренд': 'CHÉ LUX', 'Аромат': 'Abundance (Lemon + Linen + Vanilla)', 'Объём': '200 мл', 'Материал флакона': 'Прозрачное стекло', 'Палочки': 'Чёрные тростниковые' } },
+
+            // Тарелки
+            { id: 65, subcat: 'Тарелки', title: 'Декоративная тарелка «Ар-нуво»', shortDesc: 'Серебро, рельефный декор, путти', desc: 'Изысканная тарелка из полированного серебра с рельефным декором: по борту — изящные завитки, между ними — объёмные головки путти в сочетании с листьями остролиста. Плавные линии и тонкая проработка деталей отсылают к эстетике рубежа XIX–XX веков.', price: 3500, images: ['тарелки/4.png'], badge: 'Хит', sku: 'TBL-PLT-001', color: 'Серебристый', material: 'Серебро', style: 'Винтаж', specs: { 'Артикул': 'TBL-PLT-001', 'Материал': 'Полированное серебро', 'Диаметр': '25 см', 'Стиль': 'Ар-нуво', 'Декор': 'Завитки, путти, листья остролиста' } },
+            { id: 66, subcat: 'Тарелки', title: 'Керамическая миска «Рустик»', shortDesc: 'Зелёно-оливковая, крапчатая глазурь', desc: 'Лаконичная миска из керамики в приглушённом зелёно-оливковом оттенке: мягкие концентрические круги на внутренней поверхности подчёркивают ручную работу, а мелкие тёмные вкрапления добавляют фактурности. Тёплый бежево-кремовый кант по краю уравновешивает основной тон.', price: 1200, images: ['тарелки/3.png'], sku: 'TBL-PLT-002', color: 'Зелёный', material: 'Керамика', style: 'Эко', specs: { 'Артикул': 'TBL-PLT-002', 'Материал': 'Керамика', 'Диаметр': '20 см', 'Цвет': 'Зелёно-оливковый', 'Особенности': 'Крапчатая глазурь, бежево-кремовый кант' } },
+            { id: 67, subcat: 'Тарелки', title: 'Фарфоровая тарелка с золотой окантовкой', shortDesc: 'Белый фарфор, волнистый край, золото', desc: 'Элегантная тарелка из белоснежного фарфора: фигурный, мягко изогнутый борт придаёт силуэту лёгкость, а тонкая золотая кайма и деликатная линия по внутреннему кругу добавляют благородства без излишней вычурности.', price: 1800, images: ['тарелки/1.png'], badge: 'Новинка', sku: 'TBL-PLT-003', color: 'Белый', material: 'Фарфор', style: 'Классика', specs: { 'Артикул': 'TBL-PLT-003', 'Материал': 'Фарфор', 'Диаметр': '27 см', 'Цвет': 'Белый с золотой окантовкой', 'Особенности': 'Волнистый край' } },
+            { id: 68, subcat: 'Тарелки', title: 'Винтажная тарелка «Willow Pattern»', shortDesc: 'Сине-белый пейзаж, винтаж', desc: 'Эффектная тарелка с традиционным сине-белым декором: в центре — романтичный пейзаж с пагодами, мостиками, деревьями и лодкой на воде, а по борту — плотный орнамент из завитков и цветочных мотивов. Глубокий кобальтовый оттенок отсылает к английской керамике XIX века.', price: 2200, images: ['тарелки/2.png'], sku: 'TBL-PLT-004', color: 'Синий', material: 'Керамика', style: 'Винтаж', specs: { 'Артикул': 'TBL-PLT-004', 'Материал': 'Керамика', 'Диаметр': '26 см', 'Цвет': 'Сине-белый', 'Стиль': 'Willow Pattern' } },
+
+            // Кружки
+            { id: 69, subcat: 'Кружки', title: 'Чайная пара «Голубой горошек»', shortDesc: 'Фарфор, голубой горошек, золото', desc: 'Нежно-голубой фарфор с крупными белыми горошинами; внутренняя поверхность чашки и кант блюдца — белоснежные. Тонкая золотая линия подчёркивает края, основание чашки и контур ручки. Волнистый край блюдца и плавные изгибы ручки придают силуэту лёгкость.', price: 3400, images: ['кружки/1.png'], badge: 'Хит', sku: 'TBL-CUP-001', color: 'Голубой', material: 'Фарфор', style: 'Классика', specs: { 'Артикул': 'TBL-CUP-001', 'Материал': 'Фарфор', 'Объём чашки': '250 мл', 'Цвет': 'Голубой с белым горошком', 'Декор': 'Золотая окантовка', 'Комплект': 'Чашка + блюдце' } },
+            { id: 70, subcat: 'Кружки', title: 'Чайная пара «Костяной фарфор»', shortDesc: 'Костяной фарфор, кремово-белый, золото', desc: 'Белоснежный костяной фарфор с лёгкой кремовой подтонкой; рельефная гранёная фактура корпуса чашки мягко преломляет свет. Тонкий золотой ободок по верхнему краю чашки и блюдца, а также деликатная линия на ручке добавляют благородства.', price: 3800, images: ['кружки/2.png'], sku: 'TBL-CUP-002', color: 'Белый', material: 'Костяной фарфор', style: 'Классика', specs: { 'Артикул': 'TBL-CUP-002', 'Материал': 'Костяной фарфор', 'Объём чашки': '220 мл', 'Цвет': 'Кремово-белый', 'Декор': 'Золотая окантовка', 'Комплект': 'Чашка + блюдце' } },
+            { id: 71, subcat: 'Кружки', title: 'Медная кружка ручной ковки', shortDesc: 'Медь, ручная ковка, ремесленный стиль', desc: 'Металл тёплого медного оттенка: внешняя поверхность — фактурная, с «чеканной» текстурой из мелких вмятин, внутренняя — гладкая, с точечным рельефом. Массивная изогнутая ручка из того же металла. Брутальный, ремесленный образ делает кружку уместной в интерьерах в стиле лофт, рустик или индастриал.', price: 2100, images: ['кружки/3.png'], badge: 'Новинка', sku: 'TBL-CUP-003', color: 'Медный', material: 'Медь', style: 'Лофт', specs: { 'Артикул': 'TBL-CUP-003', 'Материал': 'Медь', 'Объём': '350 мл', 'Цвет': 'Медный', 'Особенности': 'Ручная ковка, чеканная текстура', 'Назначение': 'Для горячих напитков' } },
+            { id: 72, subcat: 'Кружки', title: 'Эмалированная кружка «Ретро»', shortDesc: 'Эмаль, пастельно-голубая, чёрный кант', desc: 'Пастельно-голубой гладкий корпус с глянцевым блеском; по верхнему краю — контрастный чёрный кант. Округлая, слегка приземистая форма и лаконичная ручка без излишеств отсылают к винтажной посуде середины XX века.', price: 850, images: ['кружки/4.png'], sku: 'TBL-CUP-004', color: 'Голубой', material: 'Эмаль', style: 'Винтаж', specs: { 'Артикул': 'TBL-CUP-004', 'Материал': 'Эмаль по стали', 'Объём': '300 мл', 'Цвет': 'Пастельно-голубой с чёрным кантом', 'Стиль': 'Ретро', 'Особенности': 'Устойчива к перепадам температур' } }
+        ]
+    };
+
+    function navigate(page, param = null) {
+        const app = document.getElementById('app');
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+
+        if (page === 'home') renderHome(app);
+        else if (page === 'category') renderCategory(app, param);
+        else if (page === 'subcategory') renderSubcategory(app, param);
+        else if (page === 'product') renderProductPage(app, param);
+        else if (page === 'cart') renderCart(app);
+        else if (page === 'delivery') renderDelivery(app);
+else if (page === 'returns') renderReturns(app);
+else if (page === 'contacts') renderContacts(app);
+    }
+function renderDelivery(container) {
+    container.innerHTML = `
+        <div class="breadcrumbs"><a onclick="navigate('home')">Главная</a> <span class="sep">/</span> <span class="current">Доставка и оплата</span></div>
+        <h1>Доставка и оплата</h1>
+        <div class="info-page">
+            <h3>Доставка по Иркутску</h3>
+            <ul>
+                <li>Курьером по городу — 300 ₽, бесплатно при заказе от 3000 ₽.</li>
+                <li>Срок: 1–2 рабочих дня после подтверждения заказа.</li>
+                <li>Самовывоз из пункта выдачи — бесплатно.</li>
+            </ul>
+
+            <h3>Доставка по России</h3>
+            <ul>
+                <li>СДЭК / Почта России — от 350 ₽, рассчитывается при оформлении.</li>
+                <li>Срок: 3–7 рабочих дней в зависимости от региона.</li>
+                <li>Отправка в день оплаты или на следующий рабочий день.</li>
+            </ul>
+
+            <h3>Оплата</h3>
+            <ul>
+                <li>Банковской картой на сайте (Visa, Mastercard, МИР).</li>
+                <li>СБП по QR-коду.</li>
+                <li>Наличными при получении (только по Иркутску).</li>
+                <li>Для юрлиц — оплата по счёту.</li>
+            </ul>
+
+            <p class="info-note">После оформления заказа мы свяжемся с вами для подтверждения. Если что-то пойдёт не так — напишите на <a href="mailto:hello@huggle.ru">hello@huggle.ru</a>.</p>
+        </div>
+    `;
+}
+
+function renderReturns(container) {
+    container.innerHTML = `
+        <div class="breadcrumbs"><a onclick="navigate('home')">Главная</a> <span class="sep">/</span> <span class="current">Возврат</span></div>
+        <h1>Возврат и обмен</h1>
+        <div class="info-page">
+            <h3>Условия возврата</h3>
+            <ul>
+                <li>Товар надлежащего качества можно вернуть в течение 14 дней с момента получения.</li>
+                <li>Товар должен быть в оригинальной упаковке, без следов использования.</li>
+                <li>Возврат денежных средств — в течение 10 рабочих дней после получения товара.</li>
+            </ul>
+
+            <h3>Как оформить возврат</h3>
+            <ol>
+                <li>Напишите на <a href="mailto:hello@huggle.ru">hello@huggle.ru</a> — укажите номер заказа и причину возврата.</li>
+                <li>Мы согласуем способ возврата (курьер, самовывоз или отправка).</li>
+                <li>После получения товара оформим возврат оплаты.</li>
+            </ol>
+
+            <h3>Товар с дефектом</h3>
+            <p>Если товар пришёл повреждённым — напишите нам в течение 48 часов, приложите фото. Заменим или вернём деньги, доставку оплачиваем мы.</p>
+        </div>
+    `;
+}
+
+function renderContacts(container) {
+    container.innerHTML = `
+        <div class="breadcrumbs"><a onclick="navigate('home')">Главная</a> <span class="sep">/</span> <span class="current">Контакты</span></div>
+        <h1>Контакты</h1>
+        <div class="info-page">
+            <h3>Связаться с нами</h3>
+            <ul>
+                <li>Телефон: <a href="tel:+70000000000">+7 (904) 113-45-75</a></li>
+                <li>Email: <a href="mailto:hello@huggle.ru">hello@huggle.ru</a></li>
+                <li>Мессенджеры: Telegram, WhatsApp (по номеру телефона)</li>
+            </ul>
+
+            <h3>Адрес</h3>
+            <p>г. Иркутск, ул. Игошина, 6<br>Самовывоз по предварительной договорённости.</p>
+
+            <h3>Режим работы</h3>
+            <p>Пн–Пт: 10:00–19:00<br>Сб: 11:00–17:00<br>Вс: выходной</p>
+
+            <p class="info-note">Отвечаем на сообщения в течение рабочего дня. Если не успели — напишите ещё раз, мы точно увидим.</p>
+        </div>
+    `;
+}
+    function renderHome(container) {
+        let categoriesHTML = Object.keys(db.categories).map((key, index) => {
+            const cat = db.categories[key];
+            const isLarge = index === 0 ? 'category-card--large' : '';
+            return `
+                <a onclick="navigate('category', '${key}')" class="category-card ${isLarge}">
+                    <img src="${cat.img}" alt="${cat.title}">
+                    <div class="category-overlay"><h3>${cat.title}</h3><span>Смотреть →</span></div>
+                </a>`;
+        }).join('');
+
+        container.innerHTML = `
+            <section class="hero">
+                <div class="hero-text">
+<div class="hero-kicker">Для дома и души</div>
+        <h1>Уют, который<br>начинается с мелочей</h1>
+        <div class="hero-deco-line">
+            <span></span><span></span><span></span>
+        </div>
+        
+        <p class="hero-sub">Декор, текстиль и ароматы для дома</p>
+    </div>
+                <div class="hero-image"><img src="главная/11.jpg" alt="Интерьер"></div>
+            </section>
+                        <div class="hero-banner" onclick="navigate('category', 'newyear')">
+                <div class="hero-banner-text">
+                    <div class="hero-banner-kicker">Новогодняя коллекция</div>
+                    <h3 class="hero-banner-title">
+                        Готовимся к Новому году <span>— декор, гирлянды, свечи</span>
+                    </h3>
+                    <div class="hero-banner-cta">
+                        Смотреть новинки
+                        <span class="hero-banner-cta-arrow">→</span>
+                    </div>
+                </div>
+                <img src="новыйгод/6.png" alt="Новый год" class="hero-banner-img">
+            </div>
+</div>
+            <h2 class="section-title">Каталог</h2>
+            <div class="category-grid">${categoriesHTML}</div>
+        `;
+    }
+
+    function renderCategory(container, catKey) {
+        const category = db.categories[catKey];
+
+        if (category.type === 'flat') {
+            const products = db.products.filter(p => p.subcat === category.title);
+            let productsHTML = products.map(p => productCardHTML(p, true)).join('');
+            if (products.length === 0) productsHTML = '<p>Товаров пока нет.</p>';
+
+            container.innerHTML = `
+                <div class="breadcrumbs"><a onclick="navigate('home')">Главная</a> <span class="sep">/</span> <span class="current">${category.title}</span></div>
+                <h1>${category.title}</h1>
+                <div class="catalog-toolbar"><span>Найдено ${products.length} товаров</span></div>
+                <div class="product-grid">${productsHTML}</div>
+            `;
+            return;
+        }
+
+        const subcatsHTML = `<div class="subcat-grid">${category.subcats.map(name => `
+            <a onclick="navigate('subcategory', '${name}')" class="subcat-card">
+                <img src="${category.subcatImgs?.[name] || category.img}" alt="${name}"><div class="subcat-info"><h3>${name}</h3></div>
+            </a>`).join('')}</div>`;
+
+        container.innerHTML = `
+            <div class="breadcrumbs"><a onclick="navigate('home')">Главная</a> <span class="sep">/</span> <span class="current">${category.title}</span></div>
+            <h1>${category.title}</h1>
+            ${subcatsHTML}
+        `;
+    }
+
+    function productCardHTML(p, showShrink) {
+        if (carouselState[p.id] === undefined) carouselState[p.id] = 0;
+        const currentIndex = carouselState[p.id];
+        const currentImg = p.images[currentIndex];
+
+        let dotsHTML = '';
+        if (p.images.length > 1) {
+            dotsHTML = `<div class="carousel-dots" onclick="event.stopPropagation()">` + p.images.map((_, i) => `
+                <button class="carousel-dot ${i === currentIndex ? 'active' : ''}" onclick="changeCarousel(event, ${p.id}, ${i})"></button>
+            `).join('') + `</div>`;
+        }
+
+        const shrinkStyle = currentIndex === 0 && p.subcat !== 'Шторы' && p.subcat !== 'Гирлянды'
+            ? 'object-fit:contain;padding:10%;background:#e8e5d8;' : '';
+
+        return `
+        <article class="product-card">
+            <div class="product-image-wrapper" onclick="navigate('product', ${p.id})">
+                <img src="${currentImg}" alt="${p.title}" style="${shrinkStyle}">
+                ${p.badge ? `<span class="badge ${p.badge === 'Новинка' ? 'badge--new' : ''}">${p.badge}</span>` : ''}
+                ${dotsHTML}
+            </div>
+            <h3 class="product-title" onclick="navigate('product', ${p.id})">${p.title}</h3>
+            <p class="product-desc">${p.shortDesc || p.desc}</p>
+            <div class="product-bottom">
+                <span class="price">${p.price} ₽</span>
+                <button class="btn btn-small" onclick="addToCart(event, ${p.id})">В корзину</button>
+            </div>
+        </article>`;
+    }
+
+    function renderSubcategory(container, subcatName) {
+        let parentCatKey = Object.keys(db.categories).find(key => db.categories[key].subcats.includes(subcatName));
+        let parentCat = db.categories[parentCatKey];
+        let allProducts = db.products.filter(p => p.subcat === subcatName);
+
+        // собираем доступные фильтры
+        const filterMap = {};
+        allProducts.forEach(p => {
+            ['color', 'material', 'style'].forEach(field => {
+                if (p[field]) {
+                    filterMap[field] = filterMap[field] || new Set();
+                    filterMap[field].add(p[field]);
+                }
+            });
+        });
+
+        const current = activeFilters[subcatName] || {};
+        let filteredProducts = allProducts.filter(p =>
+            Object.keys(current).every(field => !current[field] || p[field] === current[field])
+        );
+
+        const fieldNames = { color: 'Цвет', material: 'Материал', style: 'Стиль' };
+
+        const filtersHTML = Object.keys(filterMap).map(field => `
+            <div class="filter-group">
+                <h4>${fieldNames[field]}</h4>
+                ${[...filterMap[field]].map(value => `
+                    <label>
+                        <input type="checkbox" ${current[field] === value ? 'checked' : ''}
+                            onchange="toggleFilter('${subcatName}', '${field}', '${value}', this.checked)">
+                        ${value}
+                    </label>
+                `).join('')}
+            </div>
+        `).join('');
+
+        let productsHTML = filteredProducts.map(p => productCardHTML(p, true)).join('');
+        if (filteredProducts.length === 0) productsHTML = '<p>По выбранным фильтрам ничего не найдено.</p>';
+
+        const hasActive = Object.keys(current).length > 0;
+
+        container.innerHTML = `
+            <div class="breadcrumbs">
+                <a onclick="navigate('home')">Главная</a> <span class="sep">/</span> 
+                <a onclick="navigate('category', '${parentCatKey}')">${parentCat.title}</a> <span class="sep">/</span> 
+                <span class="current">${subcatName}</span>
+            </div>
+            <h1>${subcatName}</h1>
+            <div class="catalog-layout">
+                <aside class="filters">
+                    <h3>Фильтры</h3>
+                    ${filtersHTML || '<p style="color:var(--muted);font-size:13px;">Нет фильтров</p>'}
+                    ${hasActive ? `<span class="filter-reset" onclick="resetFilters('${subcatName}')">Сбросить фильтры</span>` : ''}
+                </aside>
+                <div class="catalog-main">
+                    <div class="catalog-toolbar">
+                        <span>Найдено ${filteredProducts.length} из ${allProducts.length}</span>
+                    </div>
+                    <div class="product-grid">${productsHTML}</div>
+                </div>
+            </div>
+        `;
+    }
+
+    function toggleFilter(subcatName, field, value, checked) {
+        if (!activeFilters[subcatName]) activeFilters[subcatName] = {};
+        if (checked) activeFilters[subcatName][field] = value;
+        else delete activeFilters[subcatName][field];
+        renderSubcategory(document.getElementById('app'), subcatName);
+    }
+
+    function resetFilters(subcatName) {
+        delete activeFilters[subcatName];
+        renderSubcategory(document.getElementById('app'), subcatName);
+    }
+
+        function renderProductPage(container, productId) {
+        const product = db.products.find(p => p.id === productId);
+        if (!product) return container.innerHTML = '<h2>Товар не найден</h2>';
+
+        let parentCatKey = Object.keys(db.categories).find(key =>
+            (db.categories[key].subcats && db.categories[key].subcats.includes(product.subcat)) ||
+            db.categories[key].title === product.subcat
+        );
+        let parentCat = db.categories[parentCatKey];
+
+        if (carouselState[product.id] === undefined) carouselState[product.id] = 0;
+        const currentIndex = carouselState[product.id];
+        const currentImg = product.images[currentIndex];
+
+        let dotsHTML = '';
+        if (product.images.length > 1) {
+            dotsHTML = `<div class="carousel-dots">` + product.images.map((_, i) => `
+                <button class="carousel-dot ${i === currentIndex ? 'active' : ''}" onclick="changeCarousel(event, ${product.id}, ${i})"></button>
+            `).join('') + `</div>`;
+        }
+
+        // --- БЛОК С ЦВЕТАМИ ---
+        let colorsHTML = '';
+        if (product.variants && product.variants.length > 0) {
+            if (!selectedVariants[product.id]) selectedVariants[product.id] = product.variants[0]; // По умолчанию первый
+            const currentColor = selectedVariants[product.id];
+            
+            colorsHTML = `
+                <div class="color-picker">
+                    <span class="color-picker-title">Выберите цвет: <strong>${currentColor}</strong></span>
+                    <div class="color-options">
+                        ${product.variants.map(v => `
+                            <button class="color-btn ${v === currentColor ? 'active' : ''}" 
+                                    onclick="selectVariant(event, ${product.id}, '${v}')">
+                                ${v}
+                            </button>
+                        `).join('')}
+                    </div>
+                </div>
+            `;
+        }
+
+        let specsHTML = product.specs ? Object.entries(product.specs).map(([key, value]) => `
+            <div class="specs-item"><span class="specs-key">${key}</span><span>${value}</span></div>
+        `).join('') : '';
+
+        container.innerHTML = `
+            <div class="breadcrumbs">
+                <a onclick="navigate('home')">Главная</a> <span class="sep">/</span> 
+                <a onclick="navigate('category', '${parentCatKey}')">${parentCat.title}</a> <span class="sep">/</span> 
+                <a onclick="navigate('subcategory', '${product.subcat}')">${product.subcat}</a> <span class="sep">/</span> 
+                <span class="current">${product.title}</span>
+            </div>
+
+            <div class="product-page">
+                <div class="product-page-image-wrap">
+                    <img src="${currentImg}" alt="${product.title}" style="${currentIndex === 0 && product.subcat !== 'Шторы' && product.subcat !== 'Гирлянды' ? 'object-fit:contain;padding:10%;background:#e8e5d8;' : ''}">
+                    ${dotsHTML}
+                </div>
+
+                <div class="product-page-info">
+                    <h1>${product.title}</h1>
+                    <div class="product-sku">Артикул: ${product.sku}</div>
+                    <div class="product-page-price">${product.price} ₽</div>
+                    
+                    ${colorsHTML} <!-- Вставляем цвета сюда -->
+                    
+                    <p class="product-page-desc">${product.desc}</p>
+                    
+                    <div class="product-actions">
+                        <button class="btn btn-primary btn-large" onclick="addToCart(event, ${product.id})">Добавить в корзину</button>
+                    </div>
+
+                    <br><br>
+                    <h3 class="specs-title">Характеристики</h3>
+                    <div class="specs-list">${specsHTML}</div>
+                </div>
+            </div>
+        `;
+    }
+    function renderCart(container) {
+        const ids = Object.keys(cart);
+        if (ids.length === 0) {
+            container.innerHTML = `
+                <div class="breadcrumbs"><a onclick="navigate('home')">Главная</a> <span class="sep">/</span> <span class="current">Корзина</span></div>
+                <h1>Корзина</h1>
+                <div class="cart-empty">
+                    <p>Корзина пуста.</p>
+                    <p><a onclick="navigate('home')">Перейти в каталог →</a></p>
+                </div>
+            `;
+            return;
+        }
+
+        let total = 0;
+        const itemsHTML = ids.map(id => {
+            const p = db.products.find(x => x.id === Number(id));
+            if (!p) return '';
+            const qty = cart[id];
+            total += p.price * qty;
+            return `
+                <div class="cart-item">
+                    <img src="${p.images[0]}" alt="${p.title}">
+                    <div>
+                        <div class="cart-item-title">${p.title}</div>
+                        <div class="cart-item-price">${p.price} ₽ × ${qty} = ${p.price * qty} ₽</div>
+                    </div>
+                    <div class="cart-qty">
+                        <button onclick="changeQty(${p.id}, -1)">−</button>
+                        <span>${qty}</span>
+                        <button onclick="changeQty(${p.id}, 1)">+</button>
+                    </div>
+                    <button class="cart-remove" onclick="removeFromCart(${p.id})">Удалить</button>
+                </div>`;
+        }).join('');
+
+        container.innerHTML = `
+            <div class="breadcrumbs"><a onclick="navigate('home')">Главная</a> <span class="sep">/</span> <span class="current">Корзина</span></div>
+            <h1>Корзина</h1>
+            <div class="cart-page">${itemsHTML}</div>
+            <div class="cart-total">
+                <span>Итого</span>
+                <span>${total} ₽</span>
+            </div>
+            <div style="margin-top:24px;">
+                <button class="btn btn-primary btn-large">Оформить заказ</button>
+            </div>
+        `;
+    }
+
+    function changeCarousel(event, productId, newIndex) {
+        event.stopPropagation();
+        event.preventDefault();
+
+        carouselState[productId] = newIndex;
+        const product = db.products.find(p => p.id === productId);
+        if (!product) return;
+
+        const dotsContainer = event.target.closest('.carousel-dots');
+        if (!dotsContainer) return;
+
+        const wrapper = dotsContainer.parentElement;
+        const imgElement = wrapper.querySelector('img');
+
+        if (imgElement && product.images[newIndex]) {
+            imgElement.src = product.images[newIndex];
+            const shrink = newIndex === 0 && product.subcat !== 'Шторы' && product.subcat !== 'Гирлянды';
+            if (shrink) {
+                imgElement.style.objectFit = 'contain';
+                imgElement.style.padding = '10%';
+                imgElement.style.background = '#e8e5d8';
+            } else {
+                imgElement.style.objectFit = 'cover';
+                imgElement.style.padding = '0';
+                imgElement.style.background = 'transparent';
+            }
+        }
+
+        const allDots = dotsContainer.querySelectorAll('.carousel-dot');
+        allDots.forEach((dot, index) => {
+            dot.classList.toggle('active', index === newIndex);
+        });
+    }
+let selectedVariants = {}; // Храним выбранный цвет для каждого товара
+
+    function selectVariant(event, productId, variant) {
+        event.preventDefault();
+        event.stopPropagation();
+        
+        selectedVariants[productId] = variant;
+        
+        const product = db.products.find(p => p.id === productId);
+        if (product && product.variants) {
+            // Ищем, какой по счету этот цвет в массиве (индекс)
+            const colorIndex = product.variants.indexOf(variant);
+            // Если есть картинка под этот цвет — переключаем карусель
+            if (product.images[colorIndex]) {
+                carouselState[productId] = colorIndex;
+            }
+        }
+        
+        // Перерисовываем страницу товара, чтобы обновить кнопку и фото
+        renderProductPage(document.getElementById('app'), productId);
+    }
+    updateCartUI();
+    navigate('home');
+</script>
+
+</body>
+</html>
